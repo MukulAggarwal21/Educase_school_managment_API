@@ -37,13 +37,11 @@ const listSchools = async (req, res) => {
         
         const schools = await School.findAll();
         
-        // Calculate distance for each school and sort by proximity
         const schoolsWithDistance = schools.map(school => ({
             ...school,
             distance: calculateDistance(userLat, userLon, school.latitude, school.longitude)
         }));
         
-        // Sort by distance (closest first)
         schoolsWithDistance.sort((a, b) => a.distance - b.distance);
         
         res.status(200).json({

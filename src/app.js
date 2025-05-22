@@ -8,10 +8,8 @@ const { testConnection } = require('./config/database');
 
 const app = express();
 
-// Security middleware
 app.use(helmet());
 
-// CORS configuration
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
         ? ['https://yourdomain.com'] 
@@ -19,17 +17,13 @@ app.use(cors({
     credentials: true
 }));
 
-// Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Test database connection
 testConnection();
 
-// Routes
 app.use('/api', schoolRoutes);
 
-// Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({
         success: true,
@@ -38,7 +32,6 @@ app.get('/health', (req, res) => {
     });
 });
 
-// Root endpoint
 app.get('/', (req, res) => {
     res.status(200).json({
         success: true,
@@ -51,7 +44,6 @@ app.get('/', (req, res) => {
     });
 });
 
-// 404 handler
 app.use('*', (req, res) => {
     res.status(404).json({
         success: false,
@@ -59,7 +51,6 @@ app.use('*', (req, res) => {
     });
 });
 
-// Global error handler
 app.use((error, req, res, next) => {
     console.error('Global error:', error);
     res.status(500).json({
